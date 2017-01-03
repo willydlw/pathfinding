@@ -15,6 +15,11 @@ class Cell{
   
   color stateColor;
   
+  // List status
+  boolean inOpenList;
+  boolean inClosedList;
+  boolean traversable;
+  
   
   // Constructor
   Cell(int r, int c, int cellSize, int number){
@@ -32,6 +37,10 @@ class Cell{
     stateColor = color(255, 255, 255);
     
     //cellName = new String();
+    
+    inOpenList = false;
+    inClosedList = false;
+    traversable = true;
     
   }
   

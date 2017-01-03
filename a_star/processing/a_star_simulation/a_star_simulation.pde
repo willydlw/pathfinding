@@ -1,5 +1,6 @@
 /* A* Visualization */
 
+import java.util.ArrayList;
 
 // Grid information
 Cell [] grid;            // array of Cell objects
@@ -13,6 +14,10 @@ int cellCount;
 Cell A;
 Cell B;
 
+ArrayList<Cell> closedList;
+ArrayList<Cell> openList;
+
+
 static final int diagonalCost = 14;
 static final int straightCost = 10;
 
@@ -22,6 +27,10 @@ void setup(){
   gridCols = floor(width / cellSize);
   cellCount = gridRows * gridCols;
   grid = new Cell[cellCount];
+  
+  // allocate memory for open and closed lists
+  openList = new ArrayList<Cell>(5);
+  closedList = new ArrayList<Cell>(5);
   
   // populate the grid with cell objects
   int index = 0;
@@ -40,26 +49,43 @@ void setup(){
   B = grid[index];
   B.cellName = new String("B");
   
+  // add the start node to open list
+  openList.add(A);
+  A.inOpenList = true;
+  
   noLoop();
   
 }
 
 void draw(){
-  // current, start, goal
-  Cell current = A;
   
-  updateNeighborCost(current, A, B);
+  if(openList.size() > 0){
+    // current = node in OPEN with lowest f cost
+    int listIndex = findLowestFCost();
+    
+    // remove current from the open list
+    Cell current = openList.remove(listIndex);
+    current.inOpenList = false;
+    
+    // add current to the closed list
+    closedList.add(current);
+    current.inClosedList = true;
+    
+    // if current is the target node, return. path found
+    if(current == B){
+      println("\nTarget Node Reached");
+      noLoop();
+    }
+    
+  
+    updateNeighborCost(current, A, B);
+  }
   
   background(51);
   for(Cell g : grid){
     g.display();
   }
-  
-  // For one iteration of draw
-  // Mark a cell with A and B
-  // Calculate the gcost, hcost and fcost
-  // Display the values in each cell
-  // Slowly iterate and draw neighbor cells in different color
+
 }
 
 
@@ -76,10 +102,6 @@ void zeroCost(){
 
 // G Cost based on distance from current to start
 void updateNeighborCost(Cell current, Cell start, Cell goal){
-  println("function update G Cost");
-  println("current row: " + current.row + ", col: " + current.col);
-  println("start neighbor row: " + start.row + ", col: " + start.col);
-  println("");
   
   // update cost values in current C's 8 neighbors
   /*
@@ -109,6 +131,24 @@ void updateNeighborCost(Cell current, Cell start, Cell goal){
   }
 }
 
+int findLowestFCost(){
+  int fcost = openList.get(0).fcost;
+  int lowIndex = 0;
+  
+  for(int i = 1; i < openList.size(); i++){
+    if(openList.get(i).fcost < fcost){
+      lowIndex = i;
+      fcost = openList.get(i).fcost;
+    }
+    else if(openList.get(i).fcost == fcost){
+      if(openList.get(i).hcost < openList.get(lowIndex).hcost){
+        lowIndex = i;
+      }
+    }
+  }
+  
+  return lowIndex;
+}
 
   
 int calcCost(Cell node, Cell goal){
