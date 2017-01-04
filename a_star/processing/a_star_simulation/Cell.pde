@@ -20,6 +20,8 @@ class Cell{
   boolean inClosedList;
   boolean traversable;
   
+  int parentIndex;
+  
   
   // Constructor
   Cell(int r, int c, int cellSize, int number){
@@ -38,21 +40,25 @@ class Cell{
     
     //cellName = new String();
     
+    // A star list status
     inOpenList = false;
     inClosedList = false;
-    traversable = true;
+    traversable = true; 
+    
+    parentIndex = -1;
     
   }
   
   // method for drawing the object
   void display(){
     stroke(0);
+    /*
     if(cellName != null){
       fill(24, 182, 242);
     }
-    else {
+    else { */
       fill(stateColor);
-    }
+    // } 
     rect(x, y, csize, csize);
     fill(0);
     // display cell number

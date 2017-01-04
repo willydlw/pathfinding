@@ -23,6 +23,7 @@ static final int straightCost = 10;
 
 void setup(){
   size(880, 480);
+  frameRate(5);
   gridRows = floor(height / cellSize);
   gridCols = floor(width / cellSize);
   cellCount = gridRows * gridCols;
@@ -52,8 +53,9 @@ void setup(){
   // add the start node to open list
   openList.add(A);
   A.inOpenList = true;
-  
-  noLoop();
+  // cells in open list art
+  A.stateColor = color(#0AFA98);
+  //noLoop();
   
 }
 
@@ -70,6 +72,8 @@ void draw(){
     // add current to the closed list
     closedList.add(current);
     current.inClosedList = true;
+    // cells in closed list are shown in red
+    current.stateColor = color(255, 25, 75);
     
     // if current is the target node, return. path found
     if(current == B){
@@ -85,6 +89,8 @@ void draw(){
   for(Cell g : grid){
     g.display();
   }
+  
+  delay(1000);
 
 }
 
@@ -119,13 +125,35 @@ void updateNeighborCost(Cell current, Cell start, Cell goal){
     for(int nc = current.col-1; nc <= current.col+1; nc++){
       // upper left neighbor located at r-1, c-1
       neighborIndex = gridIndex(nr, nc); //<>//
-      if(neighborIndex != -1){
-        // upper left neighbor exists
-        // find cost of path from start to C's upper left neighbor
-        grid[neighborIndex].gcost = calcCost(grid[neighborIndex], start);
-        grid[neighborIndex].hcost = calcCost(grid[neighborIndex], goal);
-        grid[neighborIndex].fcost = grid[neighborIndex].gcost + grid[neighborIndex].hcost;
-        grid[neighborIndex].stateColor = color(241, 250, 10);
+      if(neighborIndex != -1){                // neighbor exists
+        
+        // if the neighbor is not traversable or neighbor is in closed list
+        //    skip to the next neighbor
+        if( grid[neighborIndex].traversable && !grid[neighborIndex].inClosedList){
+          // find cost of path 
+          int new_gcost = calcCost(grid[neighborIndex], start);
+          int new_hcost = calcCost(grid[neighborIndex], goal);
+          int new_fcost = new_gcost + new_hcost;
+          
+          // if new path to neighbor is shorter OR neighbor is not in OPEN list
+          if(new_fcost < grid[neighborIndex].fcost || !grid[neighborIndex].inOpenList){
+            grid[neighborIndex].gcost = new_gcost;
+            grid[neighborIndex].hcost = new_hcost;
+            grid[neighborIndex].fcost = new_fcost;
+            
+            // set parent of neighbor to current
+            grid[neighborIndex].parentIndex = gridIndex(current.row, current.col);
+            
+            // if neighbor is not in OPEN list
+            if(!grid[neighborIndex].inOpenList){
+              // add neighbor to OPEN
+              openList.add(grid[neighborIndex]);
+              grid[neighborIndex].inOpenList = true;
+              // show cells in the open list as green
+              grid[neighborIndex].stateColor = color(#0AFA98);
+            }
+          }
+        }
       } 
     }
   }
@@ -136,7 +164,7 @@ int findLowestFCost(){
   int lowIndex = 0;
   
   for(int i = 1; i < openList.size(); i++){
-    if(openList.get(i).fcost < fcost){
+    if(openList.get(i).fcost < fcost){ //<>//
       lowIndex = i;
       fcost = openList.get(i).fcost;
     }
@@ -174,6 +202,7 @@ int calcCost(Cell node, Cell goal){
   */
   cost = straightCost * (dx + dy) + (diagonalCost - 2 * straightCost) * min(dx,dy);
   
+  /*
   println("\nFunction Calc Cost");
   println("goal            row: " + goal.row + ", col: " + goal.col);
   println("node neighbor row: " + node.row + ", col: " + node.col);
@@ -181,6 +210,7 @@ int calcCost(Cell node, Cell goal){
   println("difference      col: " + dx);
   println("straight line cost : " + straightCost * (dx + dy));
   println("cost               : " + cost);
+  */
   
   return cost;
     
