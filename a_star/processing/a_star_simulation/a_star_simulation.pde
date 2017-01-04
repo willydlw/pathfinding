@@ -80,9 +80,9 @@ void draw(){
       println("\nTarget Node Reached");
       noLoop();
     }
-    
-  
-    updateNeighborCost(current, A, B);
+    else{
+      updateNeighborCost(current, A, B);
+    }
   }
   
   background(51);
