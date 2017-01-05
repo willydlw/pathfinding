@@ -78,6 +78,17 @@ void draw(){
     // if current is the target node, return. path found
     if(current == B){
       println("\nTarget Node Reached");
+      println("Path from goal node B to start node A shown in red");
+      print("B -> ");
+      current = grid[current.parentIndex];
+      int num;
+      while(current != A){
+        num = gridIndex(current.row, current.col);
+        print(num + "-> ");
+        current = grid[current.parentIndex];
+      }
+      
+      println(" A");
       noLoop();
     }
     else{

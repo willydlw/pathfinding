@@ -60,10 +60,11 @@ class Cell{
       fill(stateColor);
     // } 
     rect(x, y, csize, csize);
-    fill(0);
+    //fill(0, 102, 153);
+  
     // display cell number
-    //text(cellNumber, x+cellSize/3, y+cellSize/3);
-    
+    //text(cellNumber, x+cellSize/3, y+7*cellSize/8);
+    fill(0);
     textSize(12);
     // display gcost
     if(gcost != 0 && cellName == null){
