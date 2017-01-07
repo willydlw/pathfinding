@@ -51,21 +51,16 @@ class Cell{
   
   // method for drawing the object
   void display(){
-    stroke(0);
-    /*
-    if(cellName != null){
-      fill(24, 182, 242);
-    }
-    else { */
-      fill(stateColor);
-    // } 
+    
+    stroke(0);          // black stroke border on rectangle
+    fill(stateColor);
     rect(x, y, csize, csize);
-    //fill(0, 102, 153);
   
     // display cell number
     //text(cellNumber, x+cellSize/3, y+7*cellSize/8);
     fill(0);
     textSize(12);
+    
     // display gcost
     if(gcost != 0 && cellName == null){
       text(gcost, x+cellSize/8, y+cellSize/4);
@@ -83,7 +78,6 @@ class Cell{
       textSize(16);
       text(fcost, x+3*cellSize/8, y+5*cellSize/8);
     }
-    
   }
   
 }

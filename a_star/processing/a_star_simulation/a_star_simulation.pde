@@ -31,6 +31,14 @@ Cell B;
 // A star algorithm object
 Astar path;
 
+// Global variables required for animation
+// when animate is true, shows each iteration of updating map costs
+// when animate is false, program finds the path and then displays final results
+boolean animate = true;
+boolean firstStep = true;
+boolean pathNotFound = true;
+Cell current;             
+
 
 void setup(){
   size(880, 480);
@@ -44,33 +52,51 @@ void setup(){
   gmap = new Grid(gridRows, gridCols);
   
   
-  
-  
   // for testing, set A as start location, B as goal location
   int index = gmap.gridIndex(4,7);
   A = gmap.cellArray[index];
-  A.cellName = new String("A");
+  
   index = gmap.gridIndex(1,4);
   B = gmap.cellArray[index];
-  B.cellName = new String("B");
+  
   
   // create A star algorithm object
   path = new Astar(A, B, gmap);
   
-  noLoop();      // draw loop executes once only
+  
+  
+  //noLoop();      // draw loop executes once only
   
 }
 
 void draw(){
   
-  path.findPath(); //<>//
   
-  background(51);
-  
-  gmap.displayGrid();
-  
-
+  if(animate){
+    if(firstStep){
+      background(51);
+      current = path.startPathAnimation(); //<>//
+      path.theMap.displayGrid();
+      delay(1000);
+      firstStep = false;
+    }
+    else if(pathNotFound){
+      pathNotFound = path.findPathAnimation(); //<>//
+      background(51);
+      path.theMap.displayGrid();
+      delay(1000);
+    }
+    else {
+      noLoop();
+    }
+  }
+  else {
+    path.findPath();
+    path.theMap.displayGrid();
+    noLoop();                    // will stop after completing draw loop once more
+  }  //<>//
 }
- //<>// //<>//
+
+ //<>//
   
  

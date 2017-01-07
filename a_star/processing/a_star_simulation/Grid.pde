@@ -37,8 +37,13 @@ class Grid{
     }
   }
   
-  void zeroCost(){
+  void resetPath(){
     for(int i = 0; i < gmap.cellCount; i++){
+      cellArray[i].inOpenList = false;
+      cellArray[i].inClosedList = false;
+      cellArray[i].stateColor = color(255);
+      cellArray[i].cellName = null;
+      cellArray[i].parentIndex = -1;
       cellArray[i].gcost = 0;
       cellArray[i].hcost = 0;
       cellArray[i].fcost = 0;

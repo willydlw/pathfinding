@@ -13,11 +13,14 @@ class Astar{
   // cells already evaluated
   ArrayList<Cell> closedList; 
   
+  boolean goalFound;
+  
   
   Astar(Cell start, Cell goal, Grid gmap){
     A = start;
     B = goal;
     theMap = gmap;
+    goalFound = false;
     
     // allocate memory for open and closed lists
     int initialListSize = floor(gmap.cellCount/10);
@@ -30,7 +33,11 @@ class Astar{
   void findPath(){
     
     // zero all gcost, hcost and fcost to clear the map
-    theMap.zeroCost(); //<>//
+    theMap.resetPath(); //<>//
+    
+    // store cell names, reset cleared any that were stored
+    A.cellName = new String("A");
+    B.cellName = new String("B");
     
     // clear open and closed lists
     openList.clear();
@@ -40,6 +47,8 @@ class Astar{
     openList.add(A);
     A.inOpenList = true;
     A.stateColor = openListColor; 
+    
+    
     
     Cell current = A;
     
@@ -79,11 +88,77 @@ class Astar{
       }
       else{
         updateNeighborCost(current, A, B);
-        theMap.displayGrid();
-        delay(1000);
+        redraw();
       }
     }
     
+  }
+  
+  Cell startPathAnimation(){
+    // zero all gcost, hcost and fcost to clear the map
+    theMap.resetPath();
+    
+    // store cell names, reset cleared any that were stored
+    A.cellName = new String("A");
+    B.cellName = new String("B");
+    
+    // clear open and closed lists
+    openList.clear();
+    closedList.clear();
+    
+    // add the start node to open list
+    openList.add(A);
+    A.inOpenList = true;
+    A.stateColor = openListColor; 
+    
+    return A;
+    
+  }
+  
+  
+  boolean findPathAnimation(){
+    
+    
+    // loop 
+    if(openList.size() > 0){
+      
+      // set current to node in OPEN list with lowest f cost
+      // assuming that open list is not empty. Should find a path before 
+      //   emptying the open list
+      int listIndex = findLowestFCost();
+    
+      // remove current from the open list
+      current = openList.remove(listIndex);
+      current.inOpenList = false;
+    
+      // add current to the closed list
+      closedList.add(current);
+      current.inClosedList = true;
+      // cells in closed list are shown in red
+      current.stateColor = closedListColor;
+      
+      // if current is the target node,  path found
+      if(current == B){
+        println("\nTarget Node Reached");
+        println("Path from goal node B to start node A shown in red");
+        print("B -> ");
+        current = gmap.cellArray[current.parentIndex];
+        int num;
+        while(current != A){
+          num = gmap.gridIndex(current.row, current.col);
+          print(num + "-> ");
+          current = gmap.cellArray[current.parentIndex];
+        }
+        
+        println(" A");
+        return false;
+      }
+      else{
+        updateNeighborCost(current, A, B);
+        return true;
+      }
+    }
+    return false;
   }
   
   int findLowestFCost(){
