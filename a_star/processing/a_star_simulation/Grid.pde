@@ -37,11 +37,22 @@ class Grid{
     }
   }
   
-  void resetPath(){
+  void addObstacle(int row, int col, color obstacleColor){
+    int index = gridIndex(row, col);
+    cellArray[index].traversable = false;
+    cellArray[index].stateColor = obstacleColor;
+  }
+  
+  void resetGrid(boolean resetObstacle){
     for(int i = 0; i < gmap.cellCount; i++){
       cellArray[i].inOpenList = false;
       cellArray[i].inClosedList = false;
-      cellArray[i].stateColor = color(255);
+      if(resetObstacle){
+        cellArray[i].traversable = true;
+      }
+      if(cellArray[i].traversable){   // all traversable cells are initially white
+        cellArray[i].stateColor = color(255);
+      }
       cellArray[i].cellName = null;
       cellArray[i].parentIndex = -1;
       cellArray[i].gcost = 0;

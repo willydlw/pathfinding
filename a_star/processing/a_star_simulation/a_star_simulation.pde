@@ -13,6 +13,8 @@ import java.util.ArrayList;
 static final int diagonalCost = 14;
 static final int straightCost = 10;
 
+color obstacleColor = color(75);
+
 // Grid variables
 Grid gmap;               // 2D map object
 
@@ -37,8 +39,12 @@ Astar path;
 boolean animate = true;
 boolean firstStep = true;
 boolean pathNotFound = true;
-Cell current;             
+Cell current;  
 
+boolean addObstacles = true;
+boolean startup = true;
+int countDown;
+int displayTime = 1000;
 
 void setup(){
   size(880, 480);
@@ -61,42 +67,77 @@ void setup(){
   
   
   // create A star algorithm object
-  path = new Astar(A, B, gmap);
-  
-  
-  
-  //noLoop();      // draw loop executes once only
-  
+  path = new Astar(A, B, gmap); 
 }
+
+
 
 void draw(){
   
-  
-  if(animate){
+  if(addObstacles){
+    if(startup){
+      background(255);
+      textSize(24);
+      fill(0, 240, 0);
+      text("Left click to add obstacles", width/4, 7*height/24);
+      text("Right click to end obstacle mode", width/4, 13*height/24);
+      startup = false;
+      countDown = 3;
+      String msg = "Starting in " + countDown + " seconds";
+      text(msg, width/4, 19*height/24);
+      }
+      else if(countDown > 1){
+        background(255);
+        text("Left click to add obstacles", width/4, 7*height/24);
+        text("Right click to end obstacle mode", width/4, 13*height/24);
+        countDown--;
+        String msg = "Starting in " + countDown + " seconds";
+        text(msg, width/4, 19*height/24);
+      }
+      else { // do nothing, but stay here until done adding obstacles
+        path.theMap.displayGrid();
+      }
+  }
+  else if(animate){
     if(firstStep){
-      background(51);
-      current = path.startPathAnimation(); //<>//
-      path.theMap.displayGrid();
-      delay(1000);
+      background(255);
+      current = path.startPathAnimation();
       firstStep = false;
+      path.theMap.displayGrid();
     }
     else if(pathNotFound){
       pathNotFound = path.findPathAnimation(); //<>//
-      background(51);
+      background(255);
       path.theMap.displayGrid();
-      delay(1000);
     }
     else {
+      path.theMap.displayGrid();
       noLoop();
     }
   }
   else {
     path.findPath();
-    path.theMap.displayGrid();
     noLoop();                    // will stop after completing draw loop once more
-  }  //<>//
+  } 
+  
+  delay(displayTime);
+  
 }
 
- //<>//
-  
+
+void mousePressed(){
+  if(mouseButton == LEFT){
+    println("left, mouseX: " + mouseX + ", mouseY: " + mouseY);
+    int col = floor(mouseX/cellSize);
+    int row = floor(mouseY/cellSize);
+    println("row: " + row + ", col: " + col );
+    path.theMap.addObstacle(row, col, obstacleColor);
+    fill(obstacleColor);
+    rect(col*cellSize, row*cellSize, cellSize, cellSize);
+  }
+  else if(mouseButton == RIGHT){
+    println("right");
+    addObstacles = false;
+  }
+}
  

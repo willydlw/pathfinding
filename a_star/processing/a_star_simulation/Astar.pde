@@ -2,6 +2,7 @@ class Astar{
   
   final color openListColor = color(#0AFA98);          // green
   final color closedListColor = color(255, 25, 75);    // red
+  final color obstacleColor = color(75);
   
   Cell A;          // start cell
   Cell B;          // goal cell
@@ -33,7 +34,7 @@ class Astar{
   void findPath(){
     
     // zero all gcost, hcost and fcost to clear the map
-    theMap.resetPath(); //<>//
+    theMap.resetGrid(false); //<>//
     
     // store cell names, reset cleared any that were stored
     A.cellName = new String("A");
@@ -75,12 +76,15 @@ class Astar{
         println("\nTarget Node Reached");
         println("Path from goal node B to start node A shown in red");
         print("B -> ");
+        B.stateColor = color(255, 255, 0);
         current = gmap.cellArray[current.parentIndex];
+        current.stateColor = color(255, 255, 10);
         int num;
         while(current != A){
           num = gmap.gridIndex(current.row, current.col);
           print(num + "-> ");
           current = gmap.cellArray[current.parentIndex];
+          current.stateColor = color(255, 255, 10);
         }
         
         println(" A");
@@ -96,7 +100,7 @@ class Astar{
   
   Cell startPathAnimation(){
     // zero all gcost, hcost and fcost to clear the map
-    theMap.resetPath();
+    theMap.resetGrid(false);
     
     // store cell names, reset cleared any that were stored
     A.cellName = new String("A");
@@ -142,12 +146,15 @@ class Astar{
         println("\nTarget Node Reached");
         println("Path from goal node B to start node A shown in red");
         print("B -> ");
+        B.stateColor = color(255, 255, 0);
         current = gmap.cellArray[current.parentIndex];
+        current.stateColor = color(255, 255, 0);
         int num;
         while(current != A){
           num = gmap.gridIndex(current.row, current.col);
           print(num + "-> ");
           current = gmap.cellArray[current.parentIndex];
+          current.stateColor = color(255, 255, 0);
         }
         
         println(" A");
@@ -204,8 +211,8 @@ class Astar{
           // if the neighbor is not traversable or neighbor is in closed list
           //    skip to the next neighbor
           if( gmap.cellArray[neighborIndex].traversable && !gmap.cellArray[neighborIndex].inClosedList){
-            // find cost of path 
-            int new_gcost = calcCost(gmap.cellArray[neighborIndex], start);
+            // find cost of new path 
+            int new_gcost = calcCost(gmap.cellArray[neighborIndex], current) + current.gcost;
             int new_hcost = calcCost(gmap.cellArray[neighborIndex], goal);
             int new_fcost = new_gcost + new_hcost;
             
