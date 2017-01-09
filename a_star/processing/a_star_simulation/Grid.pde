@@ -37,11 +37,22 @@ class Grid{
     }
   }
   
-  void addObstacle(int row, int col, color obstacleColor){
+  void addObstacle(int row, int col, color cellColor){
     int index = gridIndex(row, col);
     cellArray[index].traversable = false;
-    cellArray[index].stateColor = obstacleColor;
+    cellArray[index].stateColor = cellColor;
   }
+  
+  Cell addStartGoal(int row, int col, color cellColor, String cellName){
+    int index = gridIndex(row, col);
+    cellArray[index].stateColor = cellColor;
+    // store cell names, reset cleared any that were stored
+    cellArray[index].cellName = new String(cellName);
+    return cellArray[index];
+  }
+  
+  
+    
   
   void resetGrid(boolean resetObstacle){
     for(int i = 0; i < gmap.cellCount; i++){

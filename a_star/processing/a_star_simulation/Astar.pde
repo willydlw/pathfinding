@@ -36,10 +36,6 @@ class Astar{
     // zero all gcost, hcost and fcost to clear the map
     theMap.resetGrid(false); //<>//
     
-    // store cell names, reset cleared any that were stored
-    A.cellName = new String("A");
-    B.cellName = new String("B");
-    
     // clear open and closed lists
     openList.clear();
     closedList.clear();
@@ -48,7 +44,6 @@ class Astar{
     openList.add(A);
     A.inOpenList = true;
     A.stateColor = openListColor; 
-    
     
     
     Cell current = A;
@@ -73,6 +68,7 @@ class Astar{
       
       // if current is the target node,  path found
       if(current == B){
+        path.goalFound = true;
         println("\nTarget Node Reached");
         println("Path from goal node B to start node A shown in red");
         print("B -> ");
@@ -143,6 +139,7 @@ class Astar{
       
       // if current is the target node,  path found
       if(current == B){
+        path.goalFound = true;
         println("\nTarget Node Reached");
         println("Path from goal node B to start node A shown in red");
         print("B -> ");
