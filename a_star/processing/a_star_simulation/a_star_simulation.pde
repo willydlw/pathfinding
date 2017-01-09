@@ -3,18 +3,64 @@
 *  A* finds the least cost (shortest ) path from a designated start location to
 *  the goal location.
 *
-*  A is the start cell
-*  B is the goal cell
+*  Running the program
+*    Start Screen counts down and displays following messages
+*      - Left mouse click place obstacle
+*      - Right mouse click stops obstacle placement
+*
+*   Place obstacle mode
+*      - Grid appears
+*      - Left mouse click turns cell gray, making that cell an obstacle
+*      - Right mouse click ends obstacle mode 
+*
+*  Place start node
+*      - Left mouse click to choose start cell location
+*      - A is shown to indicate start 
+*
+*  Place goal node
+*      - Left mouse click to choose goal location
+*      - B is shown to indicate goal 
+*
+*  Path finding simulation begins
+*      - Starting at A, the shortest path to B is found
+*      - The neighbors of A are evaluated, finding the cost of
+*          traveling from A to its neighbor. 
+*      - Costs are shown in each cell
+*          Upper left, g cost: cost from A to that cell
+*          Upper right, h cost: cost from that cell to goal
+*          Center, f cost     : total of g and h cost
+*
+*      - Find cell with lowest f cost and assign costs to traversable neighbors
+*          Cells in the open list are shown in green
+*          Cells in the closed list are shown in red
+*
+*      - Continue until the shortest (least cost) path to goal is found or it is
+*          determined there is no path
+*
+*      - The path is shown in the console window and also in yellow on the grid
+*
+*
+*   Note: in this version, diagonal, horizontal, and vertical moves are allowed
+*
+*
+*   Author: Diane Williams
+*   Date: 1/8/2017
+*
+*
 */
 
 import java.util.ArrayList;
 
-// Global Constants
-static final int diagonalCost = 14;
-static final int straightCost = 10;
+// Global Cost Constants
+static final int diagonalCost = 14;          // cost of moving one cell diagonally
+static final int straightCost = 10;          // cost of moving one cell horizontally (dx) or vertically (dy)
 
-color obstacleColor = color(150);
-color startColor = color(20, 69, 242);      // purple
+// Grid cell colors
+final color obstacleColor = color(150);            // gray
+final color startColor = color(20, 69, 242);       // purple
+
+// Start screen display time
+final int startDelayTimeMs = 5000;              // milliseconds
 
 // Grid variables
 Grid gmap;               // 2D map object
@@ -26,9 +72,8 @@ int cellSize = 80;       // cells are square, size is both width and height
 
 
 // Start and Goal Cells
-Cell A;
-Cell B;
-
+Cell A;                  // start location
+Cell B;                  // goal location
 
 
 // A star algorithm object
@@ -39,17 +84,20 @@ Astar path;
 // when animate is false, program finds the path and then displays final results
 boolean animate ;
 boolean firstStep;
-boolean pathNotFound;
-Cell current;  
+Cell current;              // need global access to current to transition from first animation step to path finding
 
-// Simulation state variables
-boolean addObstacle;
+
+
+// State variables
+boolean addObstacle;      
 boolean addStartLocation;
 boolean addGoalLocation;
 boolean atStartup;
+boolean pathNotFound;
 
+// Start screen timing 
 int startTimeMs;
-final int startDelayTimeMs = 2000;
+
 
 int countDown;
 int displayTime = 1000;
