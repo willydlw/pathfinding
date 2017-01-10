@@ -20,6 +20,7 @@ class Grid{
       }
     }
   }
+ 
   
   int gridIndex(int r, int c){
     //println("function gridIndex, r: " + r + ", c: " + c);
@@ -31,17 +32,20 @@ class Grid{
     }
   }
 
+
    void displayGrid(){
     for(Cell g : cellArray){
       g.display();
     }
   }
+ 
   
   void addObstacle(int row, int col, color cellColor){
     int index = gridIndex(row, col);
     cellArray[index].traversable = false;
     cellArray[index].stateColor = cellColor;
   }
+
   
   Cell addStartGoal(int row, int col, color cellColor, String cellName){
     int index = gridIndex(row, col);
@@ -53,7 +57,6 @@ class Grid{
   
   
     
-  
   void resetGrid(boolean resetObstacle){
     for(int i = 0; i < gmap.cellCount; i++){
       cellArray[i].inOpenList = false;

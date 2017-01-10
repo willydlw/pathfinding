@@ -49,7 +49,8 @@
 *
 */
 
-import java.util.ArrayList;
+import java.util.ArrayList;                   // open, closed lists
+import static javax.swing.JOptionPane.*;      // show message dialog
 
 // Global Cost Constants
 static final int diagonalCost = 14;          // cost of moving one cell diagonally
@@ -80,27 +81,28 @@ Cell B;                  // goal location
 Astar path;
 
 // Global variables required for animation
-// when animate is true, shows each iteration of updating map costs
-// when animate is false, program finds the path and then displays final results
-boolean animate ;
-boolean firstStep;
-Cell current;              // need global access to current to transition from first animation step to path finding
+
+
+Cell current;             // need global access to current to transition from first animation step to path finding
 
 
 
 // State variables
-boolean addObstacle;      
-boolean addStartLocation;
-boolean addGoalLocation;
-boolean atStartup;
-boolean pathNotFound;
+boolean addObstacle;         // true during obstacle placement   
+boolean addStartLocation;    // true during start location placement
+boolean addGoalLocation;     // true during goal location placement
+boolean atStartup;           // true during program's initial start
 
-// Start screen timing 
-int startTimeMs;
+boolean animate;              // true: shows each iteration of updating map costs
+                              // false: program finds the path and then displays the final results
+                              
+boolean firstStep;            // controls first step of path finding animation
+boolean pathNotFound;         // controls output when path is not found
 
+// Timing 
+int startTimeMs;              // units: milli seconds          
+int displayTimeMs = 1000;     // units: milli seconds
 
-int countDown;
-int displayTime = 1000;
 
 void setup(){
   size(880, 480);
@@ -122,18 +124,6 @@ void setup(){
   addGoalLocation = false;
   atStartup = true;
   startTimeMs = millis();
-}
-
-void startScreen(int remainingTimeMs){
-  background(255);
-  textSize(24);
-  fill(0, 240, 0);
-  textAlign(CENTER, CENTER);
-  text("A* Simulation", width/2, 3*height/24);
-  text("Left click to add obstacles", width/2, 9*height/24);
-  text("Right click to end obstacle mode", width/2, 13*height/24);
-  String msg = "Starting in " + remainingTimeMs/1000 + " seconds";
-  text(msg, width/2, 19*height/24);
 }
 
 
@@ -174,7 +164,8 @@ void draw(){
   } 
   else if(animate){
     if(firstStep){
-      delay(1000);
+      surface.setTitle("Finding Path from A to B");
+      delay(displayTimeMs);
       // create A star algorithm object
       path = new Astar(A, B, gmap); 
       background(255);
@@ -187,22 +178,33 @@ void draw(){
       pathNotFound = path.findPathAnimation(); //<>//
       background(255);
       path.theMap.displayGrid();
+      return;
     }
     else {
+      surface.setTitle("Simulation End");
       path.theMap.displayGrid();
       if(path.goalFound == false){
-        println("No path found from B to A");
+        println("No path found from A to B");
+        textSize(24);
+        fill(140, 30, 240);
+        showMessageDialog(null, "No path found from A to B");
+        noLoop();
+        return;
       }
-      noLoop();
+      else {
+        showMessageDialog(null, "Yellow shows path from A to B");
+        noLoop();
+        return;
+      }
     }
   }
   else {
     path.findPath();
+    showMessageDialog(null, "Yellow shows path from A to B");
     noLoop();                    // will stop after completing draw loop once more
   } 
   
-  delay(displayTime);
-  
+  delay(displayTimeMs);
 }
 
 
@@ -239,5 +241,18 @@ void mousePressed(){
       addStartLocation = true;
     }
   } 
+}
+
+
+void startScreen(int remainingTimeMs){
+  background(255);
+  textSize(24);
+  fill(0, 240, 0);
+  textAlign(CENTER, CENTER);
+  text("A* Simulation", width/2, 3*height/24);
+  text("Left click to add obstacles", width/2, 9*height/24);
+  text("Right click to end obstacle mode", width/2, 13*height/24);
+  String msg = "Starting in " + remainingTimeMs/1000 + " seconds";
+  text(msg, width/2, 19*height/24);
 }
  

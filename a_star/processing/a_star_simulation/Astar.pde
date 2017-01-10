@@ -112,14 +112,12 @@ class Astar{
     A.stateColor = openListColor; 
     
     return A;
-    
   }
   
   
   boolean findPathAnimation(){
-    
-    
-    // loop 
+    // if no path is found, open list will be empty at some point
+    // This will end the path finding.
     if(openList.size() > 0){
       
       // set current to node in OPEN list with lowest f cost
@@ -140,12 +138,16 @@ class Astar{
       // if current is the target node,  path found
       if(current == B){
         path.goalFound = true;
+        // Display output in console
         println("\nTarget Node Reached");
         println("Path from goal node B to start node A shown in red");
         print("B -> ");
+        
+        // show path from B to A in yellow
         B.stateColor = color(255, 255, 0);
         current = gmap.cellArray[current.parentIndex];
         current.stateColor = color(255, 255, 0);
+        
         int num;
         while(current != A){
           num = gmap.gridIndex(current.row, current.col);
@@ -155,7 +157,7 @@ class Astar{
         }
         
         println(" A");
-        return false;
+        return false;      
       }
       else{
         updateNeighborCost(current, A, B);
@@ -164,6 +166,7 @@ class Astar{
     }
     return false;
   }
+  
   
   int findLowestFCost(){
     int fcost = openList.get(0).fcost;
@@ -196,9 +199,7 @@ class Astar{
     
     int neighborIndex;
     
-    
     // update current's neighbors
-    
     for(int nr = current.row-1; nr <= current.row+1; nr++){
       for(int nc = current.col-1; nc <= current.col+1; nc++){
         // upper left neighbor located at r-1, c-1
@@ -240,7 +241,7 @@ class Astar{
   
   
   
-    
+  // Calculate the cost of the shortest movement from the node to the goal
   int calcCost(Cell node, Cell goal){
       
     int dx, dy, cost;
