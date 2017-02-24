@@ -2,8 +2,10 @@
 *
 */
 
+Grid gmap;      // 2D map object
+
 void setup(){
-  size(490,490);
+  size(491,491);
   
   // initialize cell size
   int cellSize = 70;
@@ -12,7 +14,8 @@ void setup(){
   int gridRows = floor(height / cellSize);
   int gridCols = floor(width  / cellSize);
   
-  // create a grid map
+  // allocate memory for grid object
+  gmap = new Grid(gridRows, gridCols, cellSize);
   
   
 }
@@ -21,5 +24,6 @@ void draw(){
   background(0);
   
   // display the map
+  gmap.displayGrid();
   
 }

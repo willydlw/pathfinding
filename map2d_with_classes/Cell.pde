@@ -19,7 +19,7 @@ class Cell{
     
     // x, y are physical coordinates
     x = col * cellSize;    
-    y = col * cellSize; 
+    y = row * cellSize; 
     
     stateColor = color(220);
   }
