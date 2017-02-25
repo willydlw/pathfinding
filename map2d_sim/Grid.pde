@@ -24,7 +24,7 @@ class Grid{
     }
   }
   
-  void displayGrid(){
+  void display(){
     pushMatrix();
     for(Cell g : cellArray){
       g.display();

@@ -1,5 +1,8 @@
 class Robot{
   
+  // Wheel base
+  float wheelBase;
+  float wheelRadius;
   
   // From the top view, robot wheels have width and height
   int wheelWidth;
@@ -11,8 +14,13 @@ class Robot{
   color bodyColor;
   color wheelColor;
   
-  // roboti's center in world coordinate system
+  // robot's center in world coordinate system
   PVector worldCenter;
+  
+  
+  // wheel velocity
+  float vr;
+  float vl;
   
   float heading;
   
@@ -32,6 +40,11 @@ class Robot{
   
   void setHeading(float angle){
     heading = angle;
+  }
+  
+  void setVelocity(float v, float omega){
+    vr = (2*v + omega*wheelBase)/(2*wheelRadius);
+    vl = (2*v - omega*wheelBase)/(2*wheelRadius);
   }
   
   // top view, xy plane
