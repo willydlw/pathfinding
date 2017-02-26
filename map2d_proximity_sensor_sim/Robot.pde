@@ -71,7 +71,7 @@ class Robot{
     // draw line to indicate robot's y axis
     stroke(#05525F);
     strokeWeight(2);
-    line(0, 0, 0, -bodyRadius*2);
+    line(0, 0, 0, bodyRadius*2);
     popMatrix();
   }
 } // end class definition

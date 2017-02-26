@@ -34,7 +34,7 @@ class ProximitySensor{
     // draw line to indicate robot's y axis
     stroke(#05525F);
     strokeWeight(2);
-    line(0, 0, 0, -diameter);
+    line(0, 0, 0, diameter);
     popMatrix();
   }
   

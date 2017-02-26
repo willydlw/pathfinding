@@ -7,6 +7,7 @@ Grid gmap;      // 2D map object
 Robot zumo;
 ProximitySensor sonar;
 
+
 final float pixels_per_cm = 5;
 final float map_width_inches = 7.0f * 12.0f;
 final float map_width_cm = map_width_inches * 2.54f;
@@ -69,22 +70,25 @@ void draw(){
   }
   
   println("\n");
-  
+  PVector [] detected = new PVector[length];
   float angle = startAngle;
   for(int i = 0; i < length; ++i, angle+= deltaTheta){
     // convert distance to local x, y coordinates
-    float localx = round( distance[i] * cos(angle) * 100.0)/100.0;
-    float localy = round( distance[i] * sin(angle) * 100.0)/100.0;
+    float localx = pixels_per_cm * round( distance[i] * cos(angle) * 100.0)/100.0;
+    float localy = pixels_per_cm * round( distance[i] * sin(angle) * 100.0)/100.0;
     
     // maintain two decimal places
     float worldx = round((localx*cos(sonar.heading) - localy*sin(sonar.heading)) * 100) / 100.0;
     float worldy = round((localy*cos(sonar.heading) + localy*sin(sonar.heading)) * 100) / 100.0;
+    
+    detected[i] = new PVector(sonar.location.x+worldx, sonar.location.y+worldy);
     
     println("i: " + i + ", distance: " + distance[i]);
     println("angle: " + angle);
     println("localx: " + localx + ", localy: " + localy);
     println("sonar.heading: " + sonar.heading);
     println("worldx: " + worldx + ", worldy: " + worldy);
+    println("detectedx: " + detected[i].x + ", detectedy: " + detected[i].y);
     println("");
     
   }
@@ -93,10 +97,13 @@ void draw(){
   gmap.display();
   
   zumo.display();
-  
- 
-  
+
   sonar.display();
+  
+  for(int i = 0; i < length; ++i){
+    fill(255, 0, 0);
+    ellipse(detected[i].x, detected[i].y, 5, 5);
+  }
   
 }
 
