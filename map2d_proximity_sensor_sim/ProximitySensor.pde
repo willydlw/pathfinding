@@ -46,10 +46,7 @@ class ProximitySensor{
   
     for(int i = 0; i < length; i +=1, angle += deltaTheta){
       distance[i] = 10;
-    }
-    
-    println("angle - deltaTheta: " + (angle-deltaTheta));
-    
+    }    
     return distance;
   }
   

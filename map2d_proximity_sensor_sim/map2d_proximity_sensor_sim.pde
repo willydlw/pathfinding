@@ -13,9 +13,9 @@ final float map_width_cm = map_width_inches * 2.54f;
 final float map_pixel_width = map_width_cm * pixels_per_cm;
 
 // sonar simulation sweep angles
-float startAngle = radians(80.0);    
+float startAngle = radians(0.0);    
 float stopAngle = radians(90.0);
-float deltaTheta = radians(1.0);
+float deltaTheta = radians(30.0);
 
 PVector A7;
 
@@ -66,6 +66,27 @@ void draw(){
     if( (i%3) == 0) println("");
     print("i: " + i + ", length: " + distance[i] + "    ");
  
+  }
+  
+  println("\n");
+  
+  float angle = startAngle;
+  for(int i = 0; i < length; ++i, angle+= deltaTheta){
+    // convert distance to local x, y coordinates
+    float localx = round( distance[i] * cos(angle) * 100.0)/100.0;
+    float localy = round( distance[i] * sin(angle) * 100.0)/100.0;
+    
+    // maintain two decimal places
+    float worldx = round((localx*cos(sonar.heading) - localy*sin(sonar.heading)) * 100) / 100.0;
+    float worldy = round((localy*cos(sonar.heading) + localy*sin(sonar.heading)) * 100) / 100.0;
+    
+    println("i: " + i + ", distance: " + distance[i]);
+    println("angle: " + angle);
+    println("localx: " + localx + ", localy: " + localy);
+    println("sonar.heading: " + sonar.heading);
+    println("worldx: " + worldx + ", worldy: " + worldy);
+    println("");
+    
   }
   
   // display the map
