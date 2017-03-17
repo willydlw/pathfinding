@@ -8,7 +8,7 @@ Robot zumo;
 ProximitySensor sonar;
 
 
-final float pixels_per_cm = 5;
+final float pixels_per_cm = 4;
 final float map_width_inches = 7.0f * 12.0f;
 final float map_width_cm = map_width_inches * 2.54f;
 final float map_pixel_width = map_width_cm * pixels_per_cm;
@@ -16,14 +16,13 @@ final float map_pixel_width = map_width_cm * pixels_per_cm;
 // sonar simulation sweep angles
 float startAngle = radians(0.0);    
 float stopAngle = radians(90.0);
-float deltaTheta = radians(30.0);
-
-PVector A7;
+float deltaTheta = radians(45.0);
 
 
 void setup(){
   /* map_pixel_width = map_width_cm * pixels_per_cm;
      7.0 tiles * 12 in/tile * 2.54 cm/in * 5 pixels/cm = 1067
+     7.0 tiles * 12 in/tile * 2.54 cm/in * 4 pixels/cm = 854
    
      P2D (Processing 2D): 2D graphics renderer that makes use of OpenGL-compatible 
      graphics hardware.
@@ -44,6 +43,9 @@ void setup(){
   zumo = new Robot(5, 10, 15, cellSize/2, gridRows*cellSize-cellSize/2);
   
   sonar = new ProximitySensor(width/2, height/2, 0, 4, 200);
+  
+  println("map pixel width: " + map_pixel_width);
+  delay(5000);
   noLoop();
 }
 
@@ -54,6 +56,7 @@ void draw(){
   int length = floor((stopAngle-startAngle)/deltaTheta) + 1;
   float [] distance = new float[length];
   
+  println("\nDebugging Info, distance array calculations\n");
   println("start Angle: " + startAngle + ", stopAngle: " + stopAngle);
   println("(stopAngle - startAngle)" + (stopAngle - startAngle));
   println("(stopAngle - startAngle)/deltaTheta " + (stopAngle - startAngle)/deltaTheta);
@@ -61,15 +64,8 @@ void draw(){
   
   distance = sonar.sweep(startAngle, stopAngle, deltaTheta);
   
-  println("");
-  for(int i = 0; i < length; ++i){
-    
-    if( (i%3) == 0) println("");
-    print("i: " + i + ", length: " + distance[i] + "    ");
- 
-  }
+  displayDistance(distance, length);
   
-  println("\n");
   PVector [] detected = new PVector[length];
   float angle = startAngle;
   for(int i = 0; i < length; ++i, angle+= deltaTheta){
@@ -84,14 +80,14 @@ void draw(){
     detected[i] = new PVector(sonar.location.x+worldx, sonar.location.y+worldy);
     
     println("i: " + i + ", distance: " + distance[i]);
-    println("angle: " + angle);
+    println("angle: " + degrees(angle) + " degrees");
     println("localx: " + localx + ", localy: " + localy);
     println("sonar.heading: " + sonar.heading);
     println("worldx: " + worldx + ", worldy: " + worldy);
     println("detectedx: " + detected[i].x + ", detectedy: " + detected[i].y);
     println("");
     
-  }
+  } 
   
   // display the map
   gmap.display();
@@ -103,7 +99,7 @@ void draw(){
   for(int i = 0; i < length; ++i){
     fill(255, 0, 0);
     ellipse(detected[i].x, detected[i].y, 5, 5);
-  }
+  } 
   
 }
 
@@ -116,4 +112,18 @@ void mouseClicked(){
   else if(mouseButton == RIGHT){
     gmap.clear();
       }
+}
+
+void displayDistance(float [] distance, int length){
+  
+  println("\n*** Measured Distances ***");     
+  
+  for(int i = 0; i < length; ++i){
+    
+    if( (i%3) == 0) println("");
+    print("i: " + i + ", length: " + distance[i] + "    ");
+ 
+  }
+  
+  println("\n");    // blank line
 }

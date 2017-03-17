@@ -38,6 +38,7 @@ class ProximitySensor{
     popMatrix();
   }
   
+  
   float[] sweep(float startAngle, float stopAngle, float deltaTheta){
     int length = floor( (stopAngle-startAngle)/deltaTheta)+1;
     float []distance = new float[length];
