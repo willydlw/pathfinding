@@ -44,19 +44,19 @@ void printHorizontalMapLines(int n)
 	puts("");
 }
 
-void addRandomObstacles(int rows, int cols, Cell *map, int numObstacles)
+void addCellStateRandom(int rows, int cols, Cell *map, int numToAdd, CellState cs)
 {
 	int r, c;
-	int obstacleCount = 0;
+	int count = 0;
 
-	assert(numObstacles >= 0);
+	assert(numToAdd >= 0);
 
-	while( obstacleCount < numObstacles){
+	while( count < numToAdd){
 		r = rand() % rows;
 		c = rand() % cols;
 		if( (map + r * cols + c)->cstate == EMPTY){
-			(map + r * cols + c)->cstate = OBSTACLE ;
-			++obstacleCount;
+			(map + r * cols + c)->cstate = cs ;
+			++count;
 		}
 	}
 }

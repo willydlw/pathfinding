@@ -30,7 +30,7 @@ void printHorizontalMapLines(int n);
 void printMap(int rows, int cols, Cell *map);
 
 
-void addRandomObstacles(int rows, int cols, Cell *map, int numObstacles);
+void addCellStateRandom(int rows, int cols, Cell *map, int numToAdd, CellState cs);
 
 
 #endif

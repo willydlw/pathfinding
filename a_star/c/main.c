@@ -23,7 +23,9 @@
  	Cell *map =(Cell*)malloc(rows * cols * sizeof(Cell));
 
  	initializeMap(rows, cols, map);
- 	addRandomObstacles(rows, cols, map, 2);
+ 	addCellStateRandom(rows, cols, map, 1, GOAL);
+ 	addCellStateRandom(rows, cols, map, 1, START);
+ 	addCellStateRandom(rows, cols, map, 4, OBSTACLE);
  	printMap(rows, cols, map);
 
 
