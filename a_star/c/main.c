@@ -23,8 +23,8 @@
  	Cell *map =(Cell*)malloc(rows * cols * sizeof(Cell));
 
  	initializeMap(rows, cols, map);
+ 	addRandomObstacles(rows, cols, map, 2);
  	printMap(rows, cols, map);
-
 
 
  	return 0;
