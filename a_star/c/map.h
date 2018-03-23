@@ -3,6 +3,8 @@
 
 extern const int DEFAULT_ROWS;
 extern const int DEFAULT_COLS;
+extern const int MIN_ROWS;
+extern const int MIN_COLS;
 
 typedef enum { 
 	EMPTY = 0,
@@ -14,10 +16,11 @@ typedef enum {
 const char cellCharacter[4];
 
 typedef struct Cell_t{
-	int f;
-	int g;
-	int h;
-	int parent;
+	double f;
+	double g;
+	double h;
+	int parentr;				// parent row index
+	int parentc;				// parent col index
 	CellState cstate;
 } Cell;
 
