@@ -4,6 +4,8 @@ https://en.wikipedia.org/wiki/A*_search_algorithm
 
 https://www.geeksforgeeks.org/a-search-algorithm/
 
+http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html 
+
 
 """
 
@@ -15,25 +17,24 @@ class Point(object):
 		self.x = x
 		self.y = y
 
-	def display(self):
-		print('x: ' + str(self.x) + ", y: " + str(self.y))
+	def __str__(self):
+		return 'x: ' + str(self.x) + ", y: " + str(self.y)
 
-def main():
-	print(__file__ + " A* Simulation")
 
-	# start and goal position
-	start = Point(3, 10)
-	goal = Point(15, 15)
+class Node(object):
 
-	# scale the map
-	gridSize = 1.0		# meters
-	robotSize = 1.0		# meters
+	def __init__(self, x, y, cost):
+		self.x = x
+		self.y = y
+		self.cost = cost 
+		self.parentIndex = -1
 
-	gridRows = 20
-	gridCols = 20
+	def __str__(self):
+		''' node object string representation'''
+		return str(self.x) + ", " + str(self.y) + ", " + str(self.cost)
 
-	# create an empty list to store obstacles
-	obstacle = []
+
+def generateObstacles(obstacle, gridRows, gridCols):
 
 	# fill map boundaries with obstacles
 
@@ -61,10 +62,41 @@ def main():
 		obstacle.append(Point(int(gridRows*1/3), int(gridRows-1-i)))
 
 
+def astar(start, goal):
+	''' A* algorithm '''
+	openset, closedSet = dict(), dict()
+
+	startNode = Node(start.x, start.y, 0)
+
+	openset[0] = startNode
+	
+
+
+
+
+def main():
+	print(__file__ + " A* Simulation")
+
+	
+
+	# scale the map
+	gridSize = 1.0		# meters
+	robotSize = 1.0		# meters
+
+	gridRows = 20
+	gridCols = 20
+
+	# start and goal position
+	start = Point(3, 12)
+	goal = Point(15, 5)
+
+	# create an empty list to store obstacles
+	obstacle = []
+	generateObstacles(obstacle, gridRows, gridCols)
 
 
 	#for point in obstacle:
-	#	point.display()
+	#	print(point)
 
 
 	xvalues = [px.x for px in obstacle]
@@ -74,8 +106,10 @@ def main():
 	plt.plot(goal.x, goal.y, "xb")
 	plt.plot(start.x, start.y, "xr")
 	plt.grid(True)
-	#plt.axis("equal")
 	plt.show()
+
+
+	astar(start, goal)
 
 
 
