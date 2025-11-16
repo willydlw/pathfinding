@@ -1,9 +1,14 @@
 #include <SFML/Graphics.hpp>
 
+#include "utility/ErrorLog.hpp"
+#include <iostream>
+
 int main()
 {
     // create the window
     sf::RenderWindow window(sf::VideoMode({800, 600}), "My window");
+
+    LOG_DEBUG("test", 1.24);
 
     // run the program as long as the window is open
     while (window.isOpen())

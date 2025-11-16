@@ -17,6 +17,7 @@ include_directories("include")
 add_executable(findPath)
 target_sources(findPath PUBLIC 
     src/main.cpp
+    src/utility/ErrorLog.hpp
 )
 
 
