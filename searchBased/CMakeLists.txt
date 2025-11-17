@@ -18,6 +18,8 @@ add_executable(findPath)
 target_sources(findPath PUBLIC 
     src/main.cpp
     src/utility/ErrorLog.hpp
+    src/utility/fileUtility.cpp
+    src/grid/MapLoader.cpp
 )
 
 
@@ -28,3 +30,11 @@ target_link_libraries(findPath
     PRIVATE ImGui-SFML::ImGui-SFML
     PUBLIC  m
 )
+
+
+# copy resource files to binary directories
+set(SOURCE_ASSET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
+set(DESTINATION_ASSET_DIR "${CMAKE_CURRENT_BINARY_DIR}/assets")
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/assets")
+file(COPY ${SOURCE_ASSET_DIR}/ DESTINATION "${DESTINATION_ASSET_DIR}")

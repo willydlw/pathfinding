@@ -1,7 +1,7 @@
 #include <sstream>
 
 #include "fileUtility.h"
-#include "logError.hpp"
+#include "ErrorLog.hpp"
 
  std::filesystem::path getWorkingDirectory()
  {
